@@ -1,0 +1,6 @@
+{
+  "name": "Coastal Geofencing Monitoring System",
+  "description": "Real-time coastal geofencing and LoRa buoy IoT monitoring system with dashboard, interactive GPS map, alert management, and event history.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

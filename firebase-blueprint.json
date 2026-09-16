@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Officer / Personnel profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "phone": { "type": "string" },
+        "employeeId": { "type": "string" },
+        "notes": { "type": "string" },
+        "sessionLock": { "type": "boolean" },
+        "confirmAlerts": { "type": "boolean" },
+        "auditTrail": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "displayName"]
+    },
+    "Buoy": {
+      "title": "Buoy",
+      "description": "Marine telemetry buoy status and location",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["online", "warning", "offline"] },
+        "battery": { "type": "number" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "lastPing": { "type": "string" }
+      },
+      "required": ["id", "name", "status", "battery"]
+    },
+    "Packet": {
+      "title": "Packet",
+      "description": "LoRa raw ingestion packet record",
+      "type": "object",
+      "properties": {
+        "buoyId": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "battery": { "type": "number" },
+        "receivedAt": { "type": "string" }
+      },
+      "required": ["buoyId", "battery", "receivedAt"]
+    },
+    "Alert": {
+      "title": "Alert",
+      "description": "Geofence boundary breach or system telemetry alert",
+      "type": "object",
+      "properties": {
+        "buoyId": { "type": "string" },
+        "title": { "type": "string" },
+        "detail": { "type": "string" },
+        "severity": { "type": "string", "enum": ["critical", "warning", "info"] },
+        "status": { "type": "string", "enum": ["active", "acknowledged", "resolved"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "detail", "severity", "status", "createdAt"]
+    },
+    "HistoryEvent": {
+      "title": "HistoryEvent",
+      "description": "Audit trail log event for sanctuary monitoring",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["violation", "status", "gateway"] },
+        "title": { "type": "string" },
+        "detail": { "type": "string" },
+        "buoyId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["type", "title", "detail", "createdAt"]
+    },
+    "GatewayState": {
+      "title": "GatewayState",
+      "description": "LoRa physical receiver station heartbeat state",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "connected": { "type": "boolean" },
+        "lastHeardAt": { "type": "string" }
+      },
+      "required": ["name", "connected"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Personnel profiles with RBAC restrictions"
+    },
+    "/buoys/{buoyId}": {
+      "schema": "Buoy",
+      "description": "Live GPS and battery telemetry status for coastal buoys"
+    },
+    "/packets/{packetId}": {
+      "schema": "Packet",
+      "description": "Raw incoming LoRa packet telemetry archive"
+    },
+    "/alerts/{alertId}": {
+      "schema": "Alert",
+      "description": "Geofencing violations and equipment condition alerts"
+    },
+    "/history/{historyId}": {
+      "schema": "HistoryEvent",
+      "description": "Incident history and audit trail log items"
+    },
+    "/gateway/{gatewayId}": {
+      "schema": "GatewayState",
+      "description": "Station gateway heartbeat and connectivity"
+    }
+  }
+}
